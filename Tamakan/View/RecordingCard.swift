@@ -6,12 +6,17 @@
 //
 import SwiftUI
 struct RecordingCardView: View {
-    let recording: RecordingModel
+    let id: UUID
+    let title: String
+    let date: Date
+    let duration: Double
     @Binding var progress: Double
+    let fileURL: URL
     var isExpanded: Bool
     let onTap: () -> Void
-    let onPlay: () -> Void
-    let onPause: () -> Void
+    let onPlay: (URL) -> Void
+    //let onPause: () -> Void
+    
 
 
     var body: some View {
@@ -19,18 +24,18 @@ struct RecordingCardView: View {
 
             // Top part
             HStack {
-                Text("\(recording.duration, specifier: "%.1f")")
+                Text("\(duration, specifier: "%.1f")")
                     .foregroundColor(.primary.opacity(0.8))
 
                 Spacer()
 
                 VStack(alignment: .trailing, spacing: 4) {
-                    Text(recording.recordname)
+                    Text(title)
                         .foregroundColor(.primary)
                         .font(.title3)
                         .bold()
 
-                    Text(recording.date.formatted())
+                    Text(date.formatted())
                         .foregroundColor(.primary.opacity(0.6))
                         .font(.caption)
                 }
@@ -59,22 +64,21 @@ struct RecordingCardView: View {
                         Image(systemName: "gobackward.15")
                         
                         
-                        Button(action: {
-                            onPlay()
-                        }) {
+                        Button {
+                            onPlay(fileURL)
+                        } label: {
                             Image("playButton")
-                                .resizable()
-                                .frame(width: 35, height: 35)
-                                .font(.system(size: 42))
-                            
+                                 .resizable()
+                                 .frame(width: 35, height: 35)
+                                 .font(.system(size: 42))
                         }
                         
-                        Button(action: onPause) {
-                                Image(systemName: "pause.circle.fill")
-                                .resizable()
-                                .frame(width: 35, height: 35)
-                                    .font(.system(size: 42))
-                            }
+//                        Button(action: onPause) {
+//                                Image(systemName: "pause.circle.fill")
+//                                .resizable()
+//                                .frame(width: 35, height: 35)
+//                                    .font(.system(size: 42))
+//                            }
 
 
                         Image(systemName: "goforward.15")
