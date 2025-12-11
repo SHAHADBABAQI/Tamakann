@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3D600B432EEAD5D6007AE9F5 /* WhisperKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3D600B422EEAD5D6007AE9F5 /* WhisperKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		3DF806462ECC56A000C3F67C /* Tamakan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tamakan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D600B432EEAD5D6007AE9F5 /* WhisperKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = Tamakan;
 			packageProductDependencies = (
+				3D600B422EEAD5D6007AE9F5 /* WhisperKit */,
 			);
 			productName = Tamakan;
 			productReference = 3DF806462ECC56A000C3F67C /* Tamakan.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = 3DF8063D2ECC56A000C3F67C;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				3D600B412EEAD5D6007AE9F5 /* XCRemoteSwiftPackageReference "whisperkit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3DF806472ECC56A000C3F67C /* Products */;
 			projectDirPath = "";
@@ -332,6 +341,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3D600B412EEAD5D6007AE9F5 /* XCRemoteSwiftPackageReference "whisperkit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/argmaxinc/whisperkit";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3D600B422EEAD5D6007AE9F5 /* WhisperKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3D600B412EEAD5D6007AE9F5 /* XCRemoteSwiftPackageReference "whisperkit" */;
+			productName = WhisperKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3DF8063E2ECC56A000C3F67C /* Project object */;
 }
