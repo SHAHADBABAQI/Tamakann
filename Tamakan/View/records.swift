@@ -41,6 +41,8 @@ struct records: View {
     @State var progress: Double = 0.2
     @StateObject private var audioVM = AudioRecordingViewModel()
     @Environment(\.layoutDirection) var layoutDirection
+    @Environment(\.modelContext) private var modelContext
+    
 
 
     var body: some View {
@@ -97,11 +99,29 @@ struct records: View {
                                             expandedID = (expandedID == rec.id ? nil : rec.id)
                                         }
                                     },
+                                    
                                     onPlay: { url in
                                         audioVM.playRecording(from: url)
+                                    },
+                                    onPause: {
+                                        audioVM.pauseRecording()
+                                    },
+                                    recordingModel: rec
+                                    ,
+                                    onDelete:{ recordingModel in
+                                        withAnimation(.easeInOut(duration: 0.3)) {
+                                            // Collapse the card if it's expanded
+                                            if expandedID == recordingModel.id {
+                                                expandedID = nil
+                                            }
+                                            // Delete the recording
+                                            audioVM.deletRecording(recordObject: recordingModel)
+                                        }
                                     }
                                 )
+                                .transition(.move(edge: .trailing).combined(with: .opacity))
                             }
+                            .animation(.easeInOut(duration: 0.3), value: record.count)
                             
                             }
                 .padding(.horizontal, 16)
@@ -137,6 +157,9 @@ struct records: View {
     }
     .navigationBarBackButtonHidden(true)
     .navigationBarHidden(true)
+    .onAppear {
+        audioVM.context = modelContext
+    }
         }//nav
 }//view
 

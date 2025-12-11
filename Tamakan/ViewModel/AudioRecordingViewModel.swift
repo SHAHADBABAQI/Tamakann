@@ -178,6 +178,22 @@ class AudioRecordingViewModel: ObservableObject {
             print("⏸️ Paused")
         }
     }
+    
+    func deletRecording(recordObject : RecordingModel ) {
+        guard let context = context else {
+            print("❌ ERROR: No ModelContext found for deletion.")
+            return
+        }
+        
+        context.delete(recordObject)
+        
+        do {
+            try context.save()
+            print("🗑️ Deleted recording: \(recordObject.recordname)")
+        } catch {
+            print("❌ Error saving context after deletion: \(error.localizedDescription)")
+        }
+    }
     // MARK: - Transcription
     private func transcribeChunk(at url: URL) {
         Task { [weak self] in

@@ -15,7 +15,10 @@ struct RecordingCardView: View {
     var isExpanded: Bool
     let onTap: () -> Void
     let onPlay: (URL) -> Void
-    //let onPause: () -> Void
+    let onPause: () -> Void
+    let recordingModel : RecordingModel
+    let onDelete: (RecordingModel) -> Void
+    @State var isPlaying = false
     
 
 
@@ -65,9 +68,14 @@ struct RecordingCardView: View {
                         
                         
                         Button {
-                            onPlay(fileURL)
+                            if isPlaying {
+                                onPause()
+                            } else {
+                                onPlay(fileURL)
+                            }
+                            isPlaying.toggle()
                         } label: {
-                            Image("playButton")
+                            Image(isPlaying ? "pauseButton" : "playButton")
                                  .resizable()
                                  .frame(width: 35, height: 35)
                                  .font(.system(size: 42))
@@ -82,7 +90,16 @@ struct RecordingCardView: View {
 
 
                         Image(systemName: "goforward.15")
-                        Image(systemName: "trash")
+                        Button {
+                            
+                            onDelete(recordingModel)
+                        }label:{
+                            Image(systemName: "trash")
+                        }
+                        
+                        
+                        
+                        
                     }
                     .foregroundColor(.primary)
 
