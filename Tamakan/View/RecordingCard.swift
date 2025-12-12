@@ -18,26 +18,43 @@ struct RecordingCardView: View {
     let onPause: () -> Void
     let recordingModel : RecordingModel
     let onDelete: (RecordingModel) -> Void
+    let onRename: (String) -> Void   // 👈 NEW
     @State var isPlaying = false
+    @State private var showTextSheet = false
+
     //let summary: (RecordingModel) -> Void
     
 
 
     var body: some View {
+        
+        
         VStack(alignment: .trailing, spacing: 12) {
 
             // Top part
             HStack {
-                Text("\(duration, specifier: "%.1f")")
+                Text(smartFormatDuration(duration))
                     .foregroundColor(.primary.opacity(0.8))
+
 
                 Spacer()
 
                 VStack(alignment: .trailing, spacing: 4) {
-                    Text(title)
+                    if isExpanded {
+                        TextField("Title", text: Binding(
+                            get: { title },
+                            set: { newValue in onRename(newValue) }   // call update
+                        ))
                         .foregroundColor(.primary)
                         .font(.title3)
                         .bold()
+                    } else {
+                        Text(title)
+                            .foregroundColor(.primary)
+                            .font(.title3)
+                            .bold()
+                    }
+
 
                     Text(date.formatted())
                         .foregroundColor(.primary.opacity(0.6))
@@ -64,9 +81,15 @@ struct RecordingCardView: View {
 
                     // Action buttons
                     HStack(spacing: 28) {
-                        NavigationLink(destination: ShowText(recording: recordingModel)) {
-                            Image(systemName: "text.bubble")
-                        }
+                        Button(action: {
+                                showTextSheet = true
+                            }) {
+                                Image(systemName: "text.bubble")
+                                    .font(.title2)
+                            }
+                            .sheet(isPresented: $showTextSheet) {
+                                ShowText(recording: recordingModel)
+                            }
                      
                         
                         
@@ -86,13 +109,6 @@ struct RecordingCardView: View {
                                  .frame(width: 35, height: 35)
                                  .font(.system(size: 42))
                         }
-                        
-//                        Button(action: onPause) {
-//                                Image(systemName: "pause.circle.fill")
-//                                .resizable()
-//                                .frame(width: 35, height: 35)
-//                                    .font(.system(size: 42))
-//                            }
 
 
                         Image(systemName: "goforward.15")
@@ -120,8 +136,34 @@ struct RecordingCardView: View {
             RoundedRectangle(cornerRadius: 25)
                 .fill(.primary.opacity(0.10))
         )
+    
         .animation(.easeInOut, value: isExpanded)
     }
+    
+    func smartFormatDuration(_ time: Double) -> String {
+        let hours = Int(time) / 3600
+        let minutes = (Int(time) % 3600) / 60
+        let seconds = Int(time) % 60
+        let milliseconds = Int((time.truncatingRemainder(dividingBy: 1)) * 100)
+
+        // Case 1: hours exist → show h:mm:ss
+        if hours > 0 {
+            return String(format: "%d:%02d:%02d", hours, minutes, seconds)
+        }
+
+        // Case 2: only minutes/seconds
+        if minutes > 0 {
+            return String(format: "%d:%02d", minutes, seconds)
+        }
+
+        // Case 3: less than 10 seconds → show seconds.ms
+        if time < 10 {
+            return String(format: "%01d.%02d", seconds, milliseconds)
+        }
+
+        // Case 4: normal seconds → show only seconds
+        return "\(seconds)s"
+    }
+
+
 }
-
-

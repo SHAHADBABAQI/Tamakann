@@ -1,5 +1,5 @@
 //
-//  Untitled.swift
+//  ShowText.swift
 //  تمكّن
 //
 //  Created by Ghady Al Omar on 10/06/1447 AH.
@@ -27,11 +27,12 @@ struct ShowText: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
     
+    // MARK: - Gregorian date in English
     var todayDate: String {
         let f = DateFormatter()
-        f.locale = Locale(identifier: "ar_SA")
-        f.dateFormat = "d MMMM yyyy"
-        return f.string(from: Date())
+        f.locale = Locale(identifier: "en_US") // English locale
+        f.dateFormat = "dd MMMM yyyy"         // e.g., 12 December 2025
+        return f.string(from: recording.date) // show recording date
     }
     
     var sheetBackground: Color {
@@ -53,7 +54,7 @@ struct ShowText: View {
             return Color.black.opacity(0.15)
         }
     }
-     
+    
     init(recording: RecordingModel) {
         self.recording = recording
         _text = State(initialValue: recording.transcript)
@@ -62,34 +63,28 @@ struct ShowText: View {
     var body: some View {
         VStack(spacing: 16) {
             
-            ZStack {
-                Text(todayDate)
-                    .foregroundColor(textColor)
-                
-                HStack {
-                  
-                    
-                    
-                    Spacer()
-                    
-                    Button("إنهاء") {
-                        dismiss()
-                    }
-                    .foregroundColor(textColor)
+            // MARK: - Top bar
+            HStack {
+                Button("Done") {
+                    dismiss()
                 }
+                .foregroundColor(textColor)
+                
+                Spacer()
             }
             .font(.system(size: 18, weight: .regular))
             .padding(.horizontal)
             
+            // MARK: - Summary section
             VStack(alignment: .leading, spacing: 8) {
-                Text("الملخص")
+                Text("Summary")
                     .font(.title2.bold())
                     .foregroundColor(textColor)
                 
                 HStack {
                     Label(todayDate, systemImage: "calendar")
                     Spacer()
-                    Label("\(recording.countStutter) تكرار", systemImage: "waveform")
+                    Label("\(recording.countStutter) repeats", systemImage: "waveform")
                 }
                 .font(.subheadline)
                 .foregroundColor(textColor.opacity(0.8))
@@ -100,8 +95,9 @@ struct ShowText: View {
             Divider()
                 .background(dividerColor)
             
+            // MARK: - Transcription scroll
             ScrollView {
-                Text(text.isEmpty ? "لا يوجد نص نهائي" : text)
+                Text(text.isEmpty ? "No Transcription" : text)
                     .font(.system(size: 18))
                     .foregroundColor(textColor)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -114,20 +110,20 @@ struct ShowText: View {
         .frame(maxWidth: .infinity,
                maxHeight: .infinity,
                alignment: .top)
-        .background(sheetBackground) // هنا التبديل بين الرمادي الغامق والفاتح
+        .background(sheetBackground)
         .clipShape(RoundedCorner(radius: 32, corners: [.topLeft, .topRight]))
         .ignoresSafeArea(.keyboard, edges: .bottom)
-        .environment(\.layoutDirection, .rightToLeft)
+        .environment(\.layoutDirection, .leftToRight) // ✅ LTR layout
     }
 }
 
 #Preview {
     ShowText(
         recording: RecordingModel(
-            recordname: "تسجيل تجريبي",
+            recordname: "Sample Recording",
             duration: 10.5,
             date: .now,
-            transcript: "هذا نص تجريبي للتأكد من العرض.",
+            transcript: "This is a sample text to test the display.",
             audiofile: URL(string: "file:///tmp/sample.caf")!,
             countStutter: 3
         )

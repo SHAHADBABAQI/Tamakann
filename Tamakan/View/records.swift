@@ -53,7 +53,7 @@ struct records: View {
                 VStack {
                     HStack {
                         Image("Image1")
-                            .frame(width: 180, height: 180)
+                            .frame(width: 100, height: 50)
                             .opacity(0.9)
                             .padding(.leading, 10)
                             .padding(.top, 0)
@@ -117,6 +117,8 @@ struct records: View {
                                             // Delete the recording
                                             audioVM.deletRecording(recordObject: recordingModel)
                                         }
+                                    }, onRename: { newName in
+                                        audioVM.renameRecording(rec, to: newName)
                                     }
                                     //summary: {}
                                 )
@@ -161,7 +163,10 @@ struct records: View {
     .onAppear {
         audioVM.context = modelContext
     }
-        }//nav
+        }
+        
+        .navigationBarBackButtonHidden(true)
+        //nav
 }//view
 
 }//struct
@@ -596,6 +601,7 @@ struct SecondView: View {
 ////                .frame(height: 180)
 ////                .opacity(0.9)
 ////                .cornerRadius(20)
+////
 ////                .padding(.bottom, -15)
 ////
 ////            NavigationLink(destination: recView()) {

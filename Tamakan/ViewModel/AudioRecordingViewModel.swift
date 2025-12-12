@@ -85,7 +85,7 @@ class AudioRecordingViewModel: ObservableObject {
             .appendingPathComponent(fileName)
         lastRecordingURL = url
 
-        addRecord(RcordName: fileName, duration: 0.0, date: Date(), finalText: finalText, url: url , countStuttersWords: countStuttersWords)
+        //addRecord(RcordName: fileName, duration: 0.0, date: Date(), finalText: finalText, url: url , countStuttersWords: countStuttersWords)
 
         do {
             audioFile = try AVAudioFile(forWriting: url, settings: format.settings)
@@ -137,7 +137,26 @@ class AudioRecordingViewModel: ObservableObject {
         audioEngine.stop()
         audioEngine.inputNode.removeTap(onBus: 0)
         print("⏹️ Engine stopped")
+        
+        guard let url = lastRecordingURL else { return }
+        
+        // Get duration
+        let asset = AVURLAsset(url: url)
+        let duration = CMTimeGetSeconds(asset.duration)
+        
+        // Save/update record with real duration
+        addRecord(
+            RcordName: url.lastPathComponent,
+            duration: duration,
+            date: Date(),
+            finalText: finalText,
+            url: url,
+            countStuttersWords: countStuttersWords
+        )
+        
+        print("📏 Duration saved:", duration)
     }
+
 
     // MARK: - Play recording
     func playRecording(from url: URL) {
@@ -407,7 +426,7 @@ class AudioRecordingViewModel: ObservableObject {
         var newComments: [StutterComment] = []
 
         if detectStutterComment(raw) {
-            newComments.append(StutterComment(type: "مد", word: extractStutterWord(raw), strategy: "Repeat slowly"))
+            newComments.append(StutterComment(type: "prolongation", word: extractStutterWord(raw), strategy: "Repeat slowly"))
         }
 
         if detectBlocking(raw) {
@@ -435,6 +454,15 @@ class AudioRecordingViewModel: ObservableObject {
     }
     func extractRepeatedWord(_ text: String) -> String {
         return text
+    }
+    
+    func renameRecording(_ recording: RecordingModel, to newName: String) {
+        recording.recordname = newName
+        do {
+            try context?.save()
+        } catch {
+            print("❌ Failed to rename:", error)
+        }
     }
 
     

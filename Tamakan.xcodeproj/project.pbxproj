@@ -14,9 +14,22 @@
 		3DF806462ECC56A000C3F67C /* Tamakan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tamakan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		3D20BF612EEC2CFA0080E739 /* Exceptions for "Tamakan" folder in "Tamakan" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 3DF806452ECC56A000C3F67C /* Tamakan */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		3DF806482ECC56A000C3F67C /* Tamakan */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				3D20BF612EEC2CFA0080E739 /* Exceptions for "Tamakan" folder in "Tamakan" target */,
+			);
 			path = Tamakan;
 			sourceTree = "<group>";
 		};
@@ -262,10 +275,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = MU2TU3UB9V;
+				DEVELOPMENT_TEAM = 4K5JMLYZ6J;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = plzzzzzzzzzz;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "by allowing tamakkan will get permession to access you microphone";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = plzzzzzzzz;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -296,10 +309,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = MU2TU3UB9V;
+				DEVELOPMENT_TEAM = 4K5JMLYZ6J;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = plzzzzzzzzzz;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "by allowing tamakkan will get permession to access you microphone";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = plzzzzzzzz;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
