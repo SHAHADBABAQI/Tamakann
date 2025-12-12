@@ -22,7 +22,8 @@ struct RoundedCorner: Shape {
 }
 
 struct ShowText: View {
-    @State private var text = ""
+    let recording: RecordingModel
+    @State private var text: String
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
     
@@ -52,6 +53,11 @@ struct ShowText: View {
             return Color.black.opacity(0.15)
         }
     }
+     
+    init(recording: RecordingModel) {
+        self.recording = recording
+        _text = State(initialValue: recording.transcript)
+    }
     
     var body: some View {
         VStack(spacing: 16) {
@@ -75,20 +81,32 @@ struct ShowText: View {
             .font(.system(size: 18, weight: .regular))
             .padding(.horizontal)
             
-            Text("اليوم")
-                .font(.title2.bold())
-                .foregroundColor(textColor)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal)
+            VStack(alignment: .leading, spacing: 8) {
+                Text("الملخص")
+                    .font(.title2.bold())
+                    .foregroundColor(textColor)
+                
+                HStack {
+                    Label(todayDate, systemImage: "calendar")
+                    Spacer()
+                    Label("\(recording.countStutter) تكرار", systemImage: "waveform")
+                }
+                .font(.subheadline)
+                .foregroundColor(textColor.opacity(0.8))
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal)
             
             Divider()
                 .background(dividerColor)
             
-            TextEditor(text: $text)
-                .font(.system(size: 18))
-                .foregroundColor(textColor)
-                .scrollContentBackground(.hidden)
-                .frame(minHeight: 150, alignment: .topTrailing)
+            ScrollView {
+                Text(text.isEmpty ? "لا يوجد نص نهائي" : text)
+                    .font(.system(size: 18))
+                    .foregroundColor(textColor)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.vertical, 4)
+            }
             
             Spacer(minLength: 0)
         }
@@ -104,5 +122,14 @@ struct ShowText: View {
 }
 
 #Preview {
-    ShowText()
+    ShowText(
+        recording: RecordingModel(
+            recordname: "تسجيل تجريبي",
+            duration: 10.5,
+            date: .now,
+            transcript: "هذا نص تجريبي للتأكد من العرض.",
+            audiofile: URL(string: "file:///tmp/sample.caf")!,
+            countStutter: 3
+        )
+    )
 }

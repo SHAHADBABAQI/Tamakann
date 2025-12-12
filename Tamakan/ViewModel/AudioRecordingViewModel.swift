@@ -28,6 +28,7 @@ class AudioRecordingViewModel: ObservableObject {
     // MARK: - Published UI variables
     @Published var finalText: String = ""
     @Published var comments: [StutterComment] = []
+    @Published var countStuttersWords: Int = 0
 
     // MARK: - Audio
     private let audioEngine = AVAudioEngine()
@@ -62,7 +63,6 @@ class AudioRecordingViewModel: ObservableObject {
             }
         }
     }
-
     // MARK: - Start Recording
     func startRecording() {
 
@@ -85,7 +85,7 @@ class AudioRecordingViewModel: ObservableObject {
             .appendingPathComponent(fileName)
         lastRecordingURL = url
 
-        addRecord(RcordName: fileName, duration: 0.0, date: Date(), finalText: finalText, url: url)
+        addRecord(RcordName: fileName, duration: 0.0, date: Date(), finalText: finalText, url: url , countStuttersWords: countStuttersWords)
 
         do {
             audioFile = try AVAudioFile(forWriting: url, settings: format.settings)
@@ -132,7 +132,6 @@ class AudioRecordingViewModel: ObservableObject {
             print("❌ Engine start error:", error)
         }
     }
-
     // MARK: - Stop Recording
     func stopRecording() {
         audioEngine.stop()
@@ -235,6 +234,8 @@ class AudioRecordingViewModel: ObservableObject {
 
                         // 4️⃣ Stutter detection using cleaned version (optional)
                         if self.analyzeStutter(cleaned) {
+                            self.countStuttersWords+=1
+                            print("🟥 Stuttering counter: \(self.countStuttersWords)")
                             print("🟥 Stuttering detected")
                         }
                         print("🟢🟢 Transcribed RAW:" , text)
@@ -290,7 +291,7 @@ class AudioRecordingViewModel: ObservableObject {
     }
 
     // MARK: - Save new record
-    func addRecord(RcordName: String, duration: Double, date: Date, finalText: String, url: URL) {
+    func addRecord(RcordName: String, duration: Double, date: Date, finalText: String, url: URL , countStuttersWords:Int) {
 
         guard let context else {
             print("❌ ERROR: No ModelContext found.")
@@ -302,7 +303,8 @@ class AudioRecordingViewModel: ObservableObject {
             duration: duration,
             date: date,
             transcript: finalText,
-            audiofile: url
+            audiofile: url,
+            countStutter: countStuttersWords
         )
 
         context.insert(newRecord)

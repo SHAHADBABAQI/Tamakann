@@ -118,6 +118,7 @@ struct records: View {
                                             audioVM.deletRecording(recordObject: recordingModel)
                                         }
                                     }
+                                    //summary: {}
                                 )
                                 .transition(.move(edge: .trailing).combined(with: .opacity))
                             }

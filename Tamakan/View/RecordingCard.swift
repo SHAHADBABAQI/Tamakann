@@ -19,6 +19,7 @@ struct RecordingCardView: View {
     let recordingModel : RecordingModel
     let onDelete: (RecordingModel) -> Void
     @State var isPlaying = false
+    //let summary: (RecordingModel) -> Void
     
 
 
@@ -63,7 +64,12 @@ struct RecordingCardView: View {
 
                     // Action buttons
                     HStack(spacing: 28) {
-                        Image(systemName: "text.bubble")
+                        NavigationLink(destination: ShowText(recording: recordingModel)) {
+                            Image(systemName: "text.bubble")
+                        }
+                     
+                        
+                        
                         Image(systemName: "gobackward.15")
                         
                         
