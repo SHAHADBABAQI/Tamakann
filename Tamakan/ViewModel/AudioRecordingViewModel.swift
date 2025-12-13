@@ -234,10 +234,14 @@ class AudioRecordingViewModel: ObservableObject {
                         // 1️⃣ Detect blocking (before cleaning)
                         if self.detectBlocking(raw) {
                             print("⛔ BLOCKING DETECTED (silent gap)")
+                            self.countStuttersWords+=1
+                            print("🟥🟥 Stuttering counter: \(self.countStuttersWords)")
                         }
                         // 2️⃣ Detect stutter comments (before cleaning)
                         if self.detectStutterComment(raw) {
                             print("🟥 STUTTER DETECTED (metadata) →", raw)
+                            self.countStuttersWords+=1
+                            print("🟥🟥 Stuttering counter: \(self.countStuttersWords)")
                         }
 
                         // 2️⃣ Clean text from Whisper metadata
@@ -253,9 +257,10 @@ class AudioRecordingViewModel: ObservableObject {
 
                         // 4️⃣ Stutter detection using cleaned version (optional)
                         if self.analyzeStutter(cleaned) {
-                            self.countStuttersWords+=1
-                            print("🟥 Stuttering counter: \(self.countStuttersWords)")
+
                             print("🟥 Stuttering detected")
+                            self.countStuttersWords+=1
+                            print("🟥🟥 Stuttering counter: \(self.countStuttersWords)")
                         }
                         print("🟢🟢 Transcribed RAW:" , text)
                         print("🟢 Transcribed:" , cleaned)
@@ -352,6 +357,8 @@ class AudioRecordingViewModel: ObservableObject {
         for comment in stutterComments {
             if lower.contains(comment) {
                 print("🟥 STUTTER COMMENT DETECTED →", text)
+//                self.countStuttersWords+=1
+//                print("🟥🟥 Stuttering counter: \(self.countStuttersWords)")
                 return true
             }
         }
