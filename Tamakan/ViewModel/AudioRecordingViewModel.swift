@@ -37,7 +37,8 @@ class AudioRecordingViewModel: ObservableObject {
     private var lastRecordingURL: URL?
 
     private var bufferQueue: [AVAudioPCMBuffer] = []
-
+    @Published var currentTime: Double = 0
+    private var playbackTimer: Timer?
     // MARK: - Whisper model (single instance)
     private var whisper: WhisperKit?
 
@@ -471,6 +472,19 @@ class AudioRecordingViewModel: ObservableObject {
             print("❌ Failed to rename:", error)
         }
     }
+    
+    func startPlaybackTimer(player: AVAudioPlayer) {
+        playbackTimer?.invalidate()
+        playbackTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
+            self.currentTime = player.currentTime
+        }
+    }
+
+    func stopPlaybackTimer() {
+        playbackTimer?.invalidate()
+        playbackTimer = nil
+    }
+
 
     
     
@@ -518,7 +532,7 @@ class AudioRecordingViewModel: ObservableObject {
 //
 //    var context: ModelContext?
 //
-//    
+//
 //    struct StutterComment: Identifiable, Hashable {
 //        let id = UUID()
 //        let type: String        // e.g., "مد", "blocking", "repetition"
@@ -539,9 +553,9 @@ class AudioRecordingViewModel: ObservableObject {
 //        }
 //    }
 //
-//    
-//    
-//    
+//
+//
+//
 //    // MARK: - Start Recording
 //    func startRecording() {
 //
@@ -567,9 +581,9 @@ class AudioRecordingViewModel: ObservableObject {
 //        try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
 //        let url = folder.appendingPathComponent(fileName)
 //
-//        
+//
 //      //  lastRecordingURL = url
-//        
+//
 //
 //        addRecord(RcordName: fileName, duration: 0.0, date: Date(), finalText: finalText, url: url)
 //
@@ -650,7 +664,7 @@ class AudioRecordingViewModel: ObservableObject {
 //
 //
 //    // MARK: - Play recording
-//    
+//
 //    // MARK: - Play recording
 //    func playRecording(from url: URL) {
 //        do {
@@ -696,13 +710,13 @@ class AudioRecordingViewModel: ObservableObject {
 ////                print("❌ Playback error:", error)
 ////            }
 ////        }
-//    
+//
 //    func pauseRecording() {
 //        guard let player = player else {
 //            print("⚠️ No active player")
 //            return
 //        }
-//        
+//
 //        if player.isPlaying {
 //            player.pause()
 //            print("⏸️ Paused")
@@ -728,7 +742,7 @@ class AudioRecordingViewModel: ObservableObject {
 //                DispatchQueue.main.async {
 ////                    if !text.isEmpty {
 ////                        self.finalText += text + " "
-//                        
+//
 //                        // 1️⃣ Detect blocking (before cleaning)
 //                        if self.detectBlocking(raw) {
 //                            print("⛔ BLOCKING DETECTED (silent gap)")
@@ -839,8 +853,8 @@ class AudioRecordingViewModel: ObservableObject {
 //        let secondLine = lastWords.dropFirst(5).joined(separator: " ")
 //        return [firstLine, secondLine].joined(separator: "\n")
 //    }
-//    
-//    
+//
+//
 //    func detectStutterComment(_ text: String) -> Bool {
 //        let lower = text.lowercased()
 //        let stutterComments = [
@@ -856,8 +870,8 @@ class AudioRecordingViewModel: ObservableObject {
 //        }
 //        return false
 //    }
-//    
-//    
+//
+//
 //    func detectBlocking(_ text: String) -> Bool {
 //        let lower = text.lowercased()
 //
@@ -865,7 +879,7 @@ class AudioRecordingViewModel: ObservableObject {
 //               lower.contains("[silence") ||
 //               lower.contains("[no_speech")
 //    }
-//    
+//
 //    // MARK: - Stutter detection in speech patterns (cleaned text)
 //    func analyzeStutter(_ rawText: String) -> Bool {
 //        let t = rawText.lowercased()
@@ -912,7 +926,7 @@ class AudioRecordingViewModel: ObservableObject {
 //
 //        return false
 //    }
-//    
+//
 //    func commentForAnalysis(_ text: String) -> String {
 //        if detectStutterComment(text) { return "مد" }
 //        if detectBlocking(text) { return "blocking" }
@@ -920,7 +934,7 @@ class AudioRecordingViewModel: ObservableObject {
 //        return "" // returns empty if no notable comment
 //    }
 //
-//    
+//
 //    func processNewText(_ text: String, raw: String) {
 //        var newComments: [StutterComment] = []
 //
@@ -955,8 +969,8 @@ class AudioRecordingViewModel: ObservableObject {
 //        return text
 //    }
 //
-//    
-//    
+//
+//
 //    // MARK: - Whisper Metadata Cleaner (remove ALL tags)
 //    func removeWhisperMetadata(from text: String) -> String {
 //        var s = text

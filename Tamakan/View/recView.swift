@@ -13,7 +13,6 @@ struct recView: View {
     @Environment(\.modelContext) private var context
     @EnvironmentObject var recViewModel: RecViewModel
     @StateObject var audioVM = AudioRecordingViewModel()
-    @State var isRecording = false
     
     func formatText(_ text: String) -> String {
         let words = text.split(separator: " ")
@@ -58,10 +57,6 @@ struct recView: View {
                             .lineLimit(2)
                             .frame(width: 300, alignment: .leading)
                             .animation(.easeInOut, value: audioVM.finalText)
-
-                        Button(action: {
-                         //   audioVM.playRecording()
-                        }) { Text("Play Recording") }
                     }
                     
                     ZStack{
@@ -100,21 +95,25 @@ struct recView: View {
                             .foregroundStyle(Color.black)
                         
                         Button {
-                            if isRecording {
+                            if recViewModel.isRecording {
+                                // STOP
                                 audioVM.stopRecording()
                                 recViewModel.stopSizeLoop()
-                                recViewModel.stopTimer()
+                                recViewModel.stopRecordingTimer()
                             } else {
+                                // START
                                 audioVM.startRecording()
                                 recViewModel.startSizeLoop()
-                                recViewModel.startTimer()
+                                recViewModel.startRecordingTimer()
                             }
-                            isRecording.toggle()
+
+                            recViewModel.isRecording.toggle()
                         } label: {
-                            Image(isRecording ? "Mic4" : "Mic")
+                            Image(recViewModel.isRecording ? "Mic4" : "Mic")
                                 .frame(width: 60, height: 60)
                                 .padding()
                         }
+
                         
                     }
                     .frame(width: 200, height: 200)
@@ -175,6 +174,10 @@ struct recView: View {
             .toolbarTitleDisplayMode(.inline)
              
         }
+        .onDisappear {
+            recViewModel.resetRecordingState()
+        }
+
 
     }
 }

@@ -14,57 +14,44 @@
 import AVFoundation
 import Combine
 import SwiftUI
-class RecViewModel : ObservableObject{
-    @Published var size :CGFloat = 1
-    @Published var size1 :CGFloat = 1
-    @Published var animationTimer: Timer?
-    @Published var time = 0.0
-    @Published var timer: Timer?
-    
-    
-//    func startSizeLoop() {
-//        // Reset before starting
-//        size = 1
-//        size1 = 1
-//
-//        // Invalidate any old timer
-//        animationTimer?.invalidate()
-//
-//        // Make a timer that fires every 1 second
-//        animationTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
-//            withAnimation(.easeInOut(duration: 0.8)) {
-//                self.size = (self.size == 1) ? 1.2 : 1
-//                self.size1 = (self.size1 == 1.3) ? 1 : 1.3
-//            }
-//        }
-//    }
-//
-//    func stopSizeLoop() {
-//        animationTimer?.invalidate()
-//        animationTimer = nil
-//        size = 1
-//    }
-    
-    func startTimer(){
+
+class RecViewModel: ObservableObject {
+
+    // Animation
+    @Published var size: CGFloat = 1
+    @Published var size1: CGFloat = 1
+    private var animationTimer: Timer?
+
+    // Timer
+    @Published var time: Double = 0
+    private var timer: Timer?
+
+    // Recording state
+    @Published var isRecording: Bool = false
+
+    // MARK: - Recording Timer
+
+    func startRecordingTimer() {
+        time = 0                       // ⬅️ reset every new recording
+        timer?.invalidate()
+
         timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { _ in
             self.time += 0.01
         }
     }
-    
-    func stopTimer() {
+
+    func stopRecordingTimer() {
         timer?.invalidate()
-        
+        timer = nil
     }
-    
+
+    // MARK: - Mic Animation
+
     func startSizeLoop() {
-        // Reset before starting
         size = 1
         size1 = 1
-        
-        // Invalidate any old timer
         animationTimer?.invalidate()
-        
-        // Make a timer that fires every 1 second
+
         animationTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
             withAnimation(.easeInOut(duration: 0.8)) {
                 self.size = (self.size == 1) ? 1.2 : 1
@@ -77,20 +64,20 @@ class RecViewModel : ObservableObject{
         animationTimer?.invalidate()
         animationTimer = nil
         size = 1
+        size1 = 1
     }
+    func resetRecordingState() {
+        // Stop everything
+        stopRecordingTimer()
+        stopSizeLoop()
+
+        // Reset values
+        time = 0
+        isRecording = false
+    }
+
 }
 
-//import AVFoundation
-//import Combine
-//import SwiftUI
-////
-////// موديل كل تسجيل يظهر في صفحة records
-////struct Recording: Identifiable {
-////    let id: Int
-////    let title: String
-////    let date: String
-////    let duration: String
-////}
 //
 //class RecViewModel: ObservableObject {
 //    @Published var size: CGFloat = 1
