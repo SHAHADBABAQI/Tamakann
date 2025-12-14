@@ -10,7 +10,7 @@ struct RecordingCardView: View {
     let title: String
     let date: Date
     let duration: Double
-    @Binding var progress: Double
+    let progress: Double
     let fileURL: URL
     var isExpanded: Bool
     let onTap: () -> Void
@@ -22,6 +22,7 @@ struct RecordingCardView: View {
     @State var isPlaying = false
     @State private var showTextSheet = false
 
+    
     //let summary: (RecordingModel) -> Void
     
 
@@ -68,7 +69,7 @@ struct RecordingCardView: View {
             if isExpanded {
                 VStack(spacing: 12) {
 
-                    Slider(value: $progress)
+                    Slider(value: .constant(progress))
                         .tint(.primary)
 
                     HStack {
@@ -146,22 +147,15 @@ struct RecordingCardView: View {
         let seconds = Int(time) % 60
         let milliseconds = Int((time.truncatingRemainder(dividingBy: 1)) * 100)
 
-        // Case 1: hours exist → show h:mm:ss
         if hours > 0 {
             return String(format: "%d:%02d:%02d", hours, minutes, seconds)
         }
-
-        // Case 2: only minutes/seconds
         if minutes > 0 {
             return String(format: "%d:%02d", minutes, seconds)
         }
-
-        // Case 3: less than 10 seconds → show seconds.ms
         if time < 10 {
             return String(format: "%01d.%02d", seconds, milliseconds)
         }
-
-        // Case 4: normal seconds → show only seconds
         return "\(seconds)s"
     }
 

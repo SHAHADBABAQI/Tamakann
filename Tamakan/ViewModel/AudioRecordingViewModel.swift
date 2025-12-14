@@ -29,6 +29,8 @@ class AudioRecordingViewModel: ObservableObject {
     @Published var finalText: String = ""
     @Published var comments: [StutterComment] = []
     @Published var countStuttersWords: Int = 0
+    @Published var currentRecordingID: UUID? = nil
+    @Published var playbackProgress: Double = 0
 
     // MARK: - Audio
     private let audioEngine = AVAudioEngine()
@@ -160,7 +162,7 @@ class AudioRecordingViewModel: ObservableObject {
 
 
     // MARK: - Play recording
-    func playRecording(from url: URL) {
+    func playRecording(from url: URL, recordingID: UUID) {
         do {
             // Ensure playback works after returning to the app
             let session = AVAudioSession.sharedInstance()
@@ -172,6 +174,9 @@ class AudioRecordingViewModel: ObservableObject {
             player?.play()
             lastRecordingURL = url
             print("🔊 Playing recording from \(url.lastPathComponent)")
+            
+            currentRecordingID = recordingID
+            startPlaybackTimer(player: player!)
         } catch {
             print("❌ Playback error:", error)
         }
@@ -182,9 +187,16 @@ class AudioRecordingViewModel: ObservableObject {
             print("⚠️ No recording found")
             return
         }
-        playRecording(from: url)
+        playRecording(from: url, recordingID: UUID())
     }
     
+    func startPlaybackTimer(player: AVAudioPlayer) {
+        playbackTimer?.invalidate()
+        playbackTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
+            self.playbackProgress = player.currentTime / player.duration
+        }
+    }
+
     
     func pauseRecording() {
         guard let player = player else {
@@ -194,6 +206,7 @@ class AudioRecordingViewModel: ObservableObject {
         
         if player.isPlaying {
             player.pause()
+            playbackTimer?.invalidate()
             print("⏸️ Paused")
         }
     }
@@ -473,12 +486,12 @@ class AudioRecordingViewModel: ObservableObject {
         }
     }
     
-    func startPlaybackTimer(player: AVAudioPlayer) {
-        playbackTimer?.invalidate()
-        playbackTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
-            self.currentTime = player.currentTime
-        }
-    }
+//    func startPlaybackTimer(player: AVAudioPlayer) {
+//        playbackTimer?.invalidate()
+//        playbackTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
+//            self.currentTime = player.currentTime
+//        }
+//    }
 
     func stopPlaybackTimer() {
         playbackTimer?.invalidate()
@@ -786,6 +799,7 @@ class AudioRecordingViewModel: ObservableObject {
 //        let totalFrames = buffers.reduce(0) { $0 + $1.frameLength }
 //        guard let merged = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: totalFrames) else {
 //            return buffers[0]
+//
 //        }
 //
 //        merged.frameLength = totalFrames
