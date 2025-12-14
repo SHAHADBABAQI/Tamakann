@@ -1,0 +1,164 @@
+{
+  "sourceLanguage" : "ar",
+  "strings" : {
+    "" : {
+
+    },
+    "-1:10" : {
+
+    },
+    "%.1f" : {
+
+    },
+    "0:00" : {
+
+    },
+    "Get Started" : {
+
+    },
+    "Improve" : {
+
+    },
+    "Play Recording" : {
+
+    },
+    "Practice" : {
+
+    },
+    "Records" : {
+
+    },
+    "search..." : {
+
+    },
+    "Speak" : {
+
+    },
+    "Strategy: %@" : {
+
+    },
+    "Word: %@" : {
+
+    },
+    "إنهاء" : {
+
+    },
+    "التسجيلات" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Records "
+          }
+        }
+      }
+    },
+    "الغاء" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
+    },
+    "اليوم" : {
+
+    },
+    "بحث…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "search..."
+          }
+        }
+      }
+    },
+    "بدء" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get Started\n"
+          }
+        }
+      }
+    },
+    "تحدّث" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speak"
+          }
+        }
+      }
+    },
+    "تخطى" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skip"
+          }
+        }
+      }
+    },
+    "تدرّب" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practice"
+          }
+        }
+      }
+    },
+    "تطوّر" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Improve"
+          }
+        }
+      }
+    },
+    "خذ نفس " : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Take a Breath"
+          }
+        }
+      }
+    },
+    "قل شيء" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Say something..."
+          }
+        }
+      }
+    },
+    "هذه الصفحة الثانية" : {
+
+    }
+  },
+  "version" : "1.1"
+}
