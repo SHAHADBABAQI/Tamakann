@@ -29,18 +29,19 @@ class AudioRecordingViewModel: ObservableObject {
     @Published var finalText: String = ""
     @Published var comments: [StutterComment] = []
     @Published var countStuttersWords: Int = 0
-    @Published var currentRecordingID: UUID? = nil
+    @Published var currentRecordingID: UUID?
     @Published var playbackProgress: Double = 0
+    @Published var isUserSeeking = false
 
     // MARK: - Audio
     private let audioEngine = AVAudioEngine()
     private var audioFile: AVAudioFile?
-    private var player: AVAudioPlayer?
+    var player: AVAudioPlayer?
     private var lastRecordingURL: URL?
 
     private var bufferQueue: [AVAudioPCMBuffer] = []
     @Published var currentTime: Double = 0
-    private var playbackTimer: Timer?
+    var playbackTimer: Timer?
     // MARK: - Whisper model (single instance)
     private var whisper: WhisperKit?
 
@@ -162,25 +163,70 @@ class AudioRecordingViewModel: ObservableObject {
 
 
     // MARK: - Play recording
+//    func playRecording(from url: URL, recordingID: UUID) {
+//        do {
+//            // Ensure playback works after returning to the app
+//            let session = AVAudioSession.sharedInstance()
+//            try session.setCategory(.playback, mode: .default)
+//            try session.setActive(true)
+//
+//            player = try AVAudioPlayer(contentsOf: url)
+//            player?.prepareToPlay()
+//            player?.play()
+//            lastRecordingURL = url
+//            print("🔊 Playing recording from \(url.lastPathComponent)")
+//            
+//            currentRecordingID = recordingID
+//            startPlaybackTimer(player: player!)
+//        } catch {
+//            print("❌ Playback error:", error)
+//        }
+//    }
+    
     func playRecording(from url: URL, recordingID: UUID) {
         do {
-            // Ensure playback works after returning to the app
             let session = AVAudioSession.sharedInstance()
-            try session.setCategory(.playback, mode: .default)
+            try session.setCategory(.playback)
             try session.setActive(true)
 
             player = try AVAudioPlayer(contentsOf: url)
             player?.prepareToPlay()
             player?.play()
-            lastRecordingURL = url
-            print("🔊 Playing recording from \(url.lastPathComponent)")
-            
+
             currentRecordingID = recordingID
-            startPlaybackTimer(player: player!)
+            startPlaybackTimer()
         } catch {
             print("❌ Playback error:", error)
         }
     }
+    
+    func startPlaybackTimer() {
+        playbackTimer?.invalidate()
+
+        playbackTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
+            guard let player = self.player, !self.isUserSeeking else { return }
+
+            self.playbackProgress = player.currentTime / player.duration
+        }
+    }
+
+    func seek(to progress: Double) {
+        guard let player = player else { return }
+        let newTime = progress * player.duration
+        player.currentTime = newTime
+    }
+
+    func forward(seconds: Double = 10) {
+        guard let player = player else { return }
+        player.currentTime = min(player.currentTime + seconds, player.duration)
+    }
+
+    func backward(seconds: Double = 10) {
+        guard let player = player else { return }
+        player.currentTime = max(player.currentTime - seconds, 0)
+    }
+
+
 
     func playRecording() {
         guard let url = lastRecordingURL else {

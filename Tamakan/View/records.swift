@@ -43,6 +43,21 @@ struct records: View {
         order: .reverse
     ) var record: [RecordingModel]
 
+    private func progressBinding(for recID: UUID) -> Binding<Double> {
+        Binding<Double>(
+            get: {
+                audioVM.currentRecordingID == recID
+                ? audioVM.playbackProgress
+                : 0
+            },
+            set: { newValue in
+                guard audioVM.currentRecordingID == recID else { return }
+                audioVM.playbackProgress = newValue
+                audioVM.seek(to: newValue)
+            }
+        )
+    }
+
     // Remove duplicate/unused progress properties
     // @State var progress: Double = 0.2
     // let progress: Double
@@ -93,42 +108,118 @@ struct records: View {
                             
                             
                             ForEach(record) { rec in
+//                                RecordingCardView(
+//                                    id: rec.id,
+//                                    title: rec.recordname,
+//                                    date: rec.date,
+//                                    duration: rec.duration,
+//                                    progress: (audioVM.currentRecordingID == rec.id ? audioVM.playbackProgress : 0),
+//                                    fileURL: rec.audiofile,
+//                                    isExpanded: expandedID == rec.id,
+//                                    onTap: {
+//                                        withAnimation {
+//                                            expandedID = (expandedID == rec.id ? nil : rec.id)
+//                                        }
+//                                    },
+//                                    
+//                                    onPlay: { url in
+//                                        audioVM.playRecording(from: url, recordingID: rec.id)
+//                                    },
+//                                    onPause: {
+//                                        audioVM.pauseRecording()
+//                                    },
+//                                    recordingModel: rec
+//                                    ,
+//                                    onDelete:{ recordingModel in
+//                                        withAnimation(.easeInOut(duration: 0.3)) {
+//                                            // Collapse the card if it's expanded
+//                                            if expandedID == recordingModel.id {
+//                                                expandedID = nil
+//                                            }
+//                                            // Delete the recording
+//                                            audioVM.deletRecording(recordObject: recordingModel)
+//                                        }
+//                                    }, onRename: { newName in
+//                                        audioVM.renameRecording(rec, to: newName)
+//                                    }
+//                                    //summary: {}
+//                                
+//                                
+//                                )
+                                
                                 RecordingCardView(
                                     id: rec.id,
                                     title: rec.recordname,
                                     date: rec.date,
                                     duration: rec.duration,
-                                    progress: (audioVM.currentRecordingID == rec.id ? audioVM.playbackProgress : 0),
+
+//                                    progress: Binding(
+//                                        get: {
+//                                            audioVM.currentRecordingID == rec.id
+//                                            ? audioVM.playbackProgress
+//                                            : 0
+//                                        },
+//                                        set: { newValue in
+//                                            guard audioVM.currentRecordingID == rec.id else { return }
+//                                            audioVM.playbackProgress = newValue
+//                                            audioVM.seek(to: newValue)
+//                                        }
+//                                    )
+                                    
+                                    progress: progressBinding(for: rec.id), isActive: true,
+                                    
+
                                     fileURL: rec.audiofile,
                                     isExpanded: expandedID == rec.id,
+
                                     onTap: {
                                         withAnimation {
                                             expandedID = (expandedID == rec.id ? nil : rec.id)
                                         }
                                     },
-                                    
+
                                     onPlay: { url in
                                         audioVM.playRecording(from: url, recordingID: rec.id)
                                     },
+
                                     onPause: {
                                         audioVM.pauseRecording()
                                     },
-                                    recordingModel: rec
-                                    ,
-                                    onDelete:{ recordingModel in
+
+                                    onSeekStart: {
+                                        audioVM.isUserSeeking = true
+                                    },
+
+                                    onSeekEnd: {
+                                        audioVM.isUserSeeking = false
+                                    },
+
+                                    onForward: {
+                                        guard audioVM.currentRecordingID == rec.id else { return }
+                                        audioVM.forward()
+                                    },
+
+                                    onBackward: {
+                                        guard audioVM.currentRecordingID == rec.id else { return }
+                                        audioVM.backward()
+                                    },
+
+                                    recordingModel: rec,
+
+                                    onDelete: { recordingModel in
                                         withAnimation(.easeInOut(duration: 0.3)) {
-                                            // Collapse the card if it's expanded
                                             if expandedID == recordingModel.id {
                                                 expandedID = nil
                                             }
-                                            // Delete the recording
                                             audioVM.deletRecording(recordObject: recordingModel)
                                         }
-                                    }, onRename: { newName in
+                                    },
+
+                                    onRename: { newName in
                                         audioVM.renameRecording(rec, to: newName)
                                     }
-                                    //summary: {}
                                 )
+
                                 .transition(.move(edge: .trailing).combined(with: .opacity))
                             }
                             .animation(.easeInOut(duration: 0.3), value: record.count)

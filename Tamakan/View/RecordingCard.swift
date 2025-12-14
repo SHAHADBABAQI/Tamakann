@@ -10,12 +10,17 @@ struct RecordingCardView: View {
     let title: String
     let date: Date
     let duration: Double
-    let progress: Double
+    @Binding var progress: Double
+    let isActive: Bool
     let fileURL: URL
     var isExpanded: Bool
     let onTap: () -> Void
     let onPlay: (URL) -> Void
     let onPause: () -> Void
+    let onSeekStart: () -> Void
+    let onSeekEnd: () -> Void
+    let onForward: () -> Void
+    let onBackward: () -> Void
     let recordingModel : RecordingModel
     let onDelete: (RecordingModel) -> Void
     let onRename: (String) -> Void   // 👈 NEW
@@ -69,16 +74,27 @@ struct RecordingCardView: View {
             if isExpanded {
                 VStack(spacing: 12) {
 
-                    Slider(value: .constant(progress))
-                        .tint(.primary)
+                    Slider(
+                        value: $progress,
+                        in: 0...1,
+                        onEditingChanged: { editing in
+                            if editing {
+                                onSeekStart()
+                            } else {
+                                onSeekEnd()
+                            }
+                        }
+                    )
+                    .disabled(!isActive)
 
-                    HStack {
-                        Text("-1:10")
-                        Spacer()
-                        Text("0:00")
-                    }
-                    .font(.caption2)
-                    .foregroundColor(.primary.opacity(0.6))
+
+//                    HStack {
+//                        Text("-1:10")
+//                        Spacer()
+//                        Text("0:00")
+//                    }
+//                    .font(.caption2)
+//                    .foregroundColor(.primary.opacity(0.6))
 
                     // Action buttons
                     HStack(spacing: 28) {
@@ -94,8 +110,12 @@ struct RecordingCardView: View {
                      
                         
                         
-                        Image(systemName: "gobackward.15")
-                        
+                        Button(action: onForward) {
+                                Image(systemName: "goforward.10")
+                                    .font(.title2)
+                            }
+                        .disabled(!isActive)
+
                         
                         Button {
                             if isPlaying {
@@ -112,7 +132,12 @@ struct RecordingCardView: View {
                         }
 
 
-                        Image(systemName: "goforward.15")
+                        Button(action: onBackward) {
+                                Image(systemName: "gobackward.10")
+                                    .font(.title2)
+                            }
+                        .disabled(!isActive)
+
                         Button {
                             
                             onDelete(recordingModel)
