@@ -47,7 +47,8 @@ struct records: View {
     @StateObject private var audioVM = AudioRecordingViewModel()
     @Environment(\.layoutDirection) var layoutDirection
     @Environment(\.modelContext) private var modelContext
-    
+    let bottomBarHeight: CGFloat = 200
+
 
 
     var body: some View {
@@ -132,9 +133,11 @@ struct records: View {
                             .animation(.easeInOut(duration: 0.3), value: record.count)
                             
                             }
+                .padding(.bottom, bottomBarHeight) // 👈 WALL
                 .padding(.horizontal, 16)
-                .padding(.bottom, 40)
+//                .padding(.bottom, 40)
             }
+                    .clipped()
         }
         
         VStack {
@@ -162,7 +165,9 @@ struct records: View {
             }
             .padding(.bottom, -30)
         }
+        
     }
+    .ignoresSafeArea(.keyboard)
     .navigationBarBackButtonHidden(true)
     .navigationBarHidden(true)
     .onAppear {
