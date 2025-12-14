@@ -37,7 +37,12 @@ import SwiftData
 struct records: View {
     @State private var searchText = ""
     @State private var expandedID: UUID? = nil
-    @Query private var record :[RecordingModel]
+//    @Query private var record :[RecordingModel]
+    @Query(
+        sort: \RecordingModel.date,
+        order: .reverse
+    ) var record: [RecordingModel]
+
     @State var progress: Double = 0.2
     @StateObject private var audioVM = AudioRecordingViewModel()
     @Environment(\.layoutDirection) var layoutDirection

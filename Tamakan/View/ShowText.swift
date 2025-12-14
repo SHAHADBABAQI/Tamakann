@@ -84,7 +84,7 @@ struct ShowText: View {
                 HStack {
                     Label(todayDate, systemImage: "calendar")
                     Spacer()
-                    Label("\(recording.countStutter) repeats", systemImage: "waveform")
+                    Label("\(recording.countStutter) stutters", systemImage: "waveform")
                 }
                 .font(.subheadline)
                 .foregroundColor(textColor.opacity(0.8))
