@@ -53,7 +53,7 @@ struct recView: View {
                     VStack(alignment: .leading){
                         // HERE 👇 YOUR LIVE TRANSCRIPTION
                         Text(audioVM.finalText.isEmpty ? "Say something..." : audioVM.displayText)
-                            .font(.system(size: 24))
+                            .font(.title3)
                             .lineLimit(2)
                             .frame(width: 300, alignment: .leading)
                             .animation(.easeInOut, value: audioVM.finalText)

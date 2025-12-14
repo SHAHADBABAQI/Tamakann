@@ -1,48 +1,6 @@
 {
   "sourceLanguage" : "ar",
   "strings" : {
-    "" : {
-
-    },
-    "-1:10" : {
-
-    },
-    "%.1f" : {
-
-    },
-    "0:00" : {
-
-    },
-    "Get Started" : {
-
-    },
-    "Improve" : {
-
-    },
-    "Play Recording" : {
-
-    },
-    "Practice" : {
-
-    },
-    "Records" : {
-
-    },
-    "search..." : {
-
-    },
-    "Speak" : {
-
-    },
-    "Strategy: %@" : {
-
-    },
-    "Word: %@" : {
-
-    },
-    "إنهاء" : {
-
-    },
     "التسجيلات" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -64,9 +22,6 @@
           }
         }
       }
-    },
-    "اليوم" : {
-
     },
     "بحث…" : {
       "extractionState" : "manual",
@@ -155,9 +110,6 @@
           }
         }
       }
-    },
-    "هذه الصفحة الثانية" : {
-
     }
   },
   "version" : "1.1"

@@ -88,7 +88,7 @@ struct records: View {
                             Spacer()
 
                             Text("Records")
-                                .font(.system(size: 32, weight: .bold))
+                                .font(.title.weight(.bold))
                                 .foregroundColor(.primary)
                                 .frame(maxWidth: .infinity,
                                        alignment: layoutDirection == .rightToLeft ? .trailing : .leading)
@@ -96,6 +96,7 @@ struct records: View {
 
                             TextField("search...", text: $searchText)
                                 .padding(12)
+                                .font(.body)
                                 .foregroundColor(.primary)
                                 .background(.primary.opacity(0.08))
                                 .cornerRadius(14)

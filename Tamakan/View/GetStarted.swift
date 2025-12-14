@@ -40,19 +40,19 @@ struct GetStarted: View {
 
                     VStack(spacing: 8) {
                         Text("Speak")
-                            .font(.system(size: 42, weight: .bold))
+                            .font(.largeTitle.weight(.bold))
                             .foregroundColor(.primary)     // ← يتغير تلقائيًا
                             .opacity(showFirst ? 1 : 0)
                             .offset(y: showFirst ? 0 : 10)
 
                         Text("Practice")
-                            .font(.system(size: 42, weight: .bold))
+                            .font(.largeTitle.weight(.bold))
                             .foregroundColor(.primary)
                             .opacity(showSecond ? 1 : 0)
                             .offset(y: showSecond ? 0 : 10)
 
                         Text("Improve")
-                            .font(.system(size: 42, weight: .bold))
+                            .font(.largeTitle.weight(.bold))
                             .foregroundColor(.primary)
                             .opacity(showThird ? 1 : 0)
                             .offset(y: showThird ? 0 : 10)
@@ -65,10 +65,10 @@ struct GetStarted: View {
                         records()
                     } label: {
                         Text("Get Started")
-                            .font(.system(size: 22, weight: .medium))
+                            .font(.title3.weight(.medium))
                             .foregroundColor(.primary)
                             .frame(maxWidth: .infinity)
-                            .frame(height: 64)
+                            .frame(minHeight: 64)
                             .background(
                                 RoundedRectangle(cornerRadius: 32, style: .continuous)
                                     .fill(Color.primary.opacity(0.06))
