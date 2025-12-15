@@ -29,9 +29,13 @@ class AudioRecordingViewModel: ObservableObject {
     @Published var finalText: String = ""
     @Published var comments: [StutterComment] = []
     @Published var countStuttersWords: Int = 0
+    
     @Published var currentRecordingID: UUID?
     @Published var playbackProgress: Double = 0
     @Published var isUserSeeking = false
+    
+    @Published var moodRatingvm: Int = 0
+    @Published var emothionTextvm: String = ""
 
     // MARK: - Audio
     private let audioEngine = AVAudioEngine()
@@ -67,6 +71,7 @@ class AudioRecordingViewModel: ObservableObject {
             }
         }
     }
+    
     // MARK: - Start Recording
     func startRecording() {
 
@@ -155,7 +160,10 @@ class AudioRecordingViewModel: ObservableObject {
             date: Date(),
             finalText: finalText,
             url: url,
-            countStuttersWords: countStuttersWords
+            countStuttersWords: countStuttersWords,
+            moodRating: moodRatingvm,
+            emothionText:emothionTextvm
+            
         )
         
         print("📏 Duration saved:", duration)
@@ -375,7 +383,7 @@ class AudioRecordingViewModel: ObservableObject {
     }
 
     // MARK: - Save new record
-    func addRecord(RcordName: String, duration: Double, date: Date, finalText: String, url: URL , countStuttersWords:Int) {
+    func addRecord(RcordName: String, duration: Double, date: Date, finalText: String, url: URL , countStuttersWords:Int ,moodRating:Int ,emothionText:String) {
 
         guard let context else {
             print("❌ ERROR: No ModelContext found.")
@@ -388,7 +396,9 @@ class AudioRecordingViewModel: ObservableObject {
             date: date,
             transcript: finalText,
             audiofile: url,
-            countStutter: countStuttersWords
+            countStutter: countStuttersWords,
+            moodRating: moodRating,
+            emothionText:emothionText
         )
 
         context.insert(newRecord)

@@ -118,14 +118,14 @@ struct ShowText: View {
 }
 
 #Preview {
-    ShowText(
-        recording: RecordingModel(
-            recordname: "Sample Recording",
-            duration: 10.5,
-            date: .now,
-            transcript: "This is a sample text to test the display.",
-            audiofile: URL(string: "file:///tmp/sample.caf")!,
-            countStutter: 3
-        )
-    )
+//    ShowText(
+//        recording: RecordingModel(
+//            recordname: "Sample Recording",
+//            duration: 10.5,
+//            date: .now,
+//            transcript: "This is a sample text to test the display.",
+//            audiofile: URL(string: "file:///tmp/sample.caf")!,
+//            countStutter: 3
+//        )
+//    )
 }
