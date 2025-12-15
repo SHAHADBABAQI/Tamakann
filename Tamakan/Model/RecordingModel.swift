@@ -35,6 +35,16 @@ class RecordingModel: Identifiable {
     }
     
     
+    func setMoodRating(MoodRatingf: Int){
+        
+        moodRating = MoodRatingf
+    }
+    func setEmothionText(EmothionTextf: String){
+        
+        emothionText = EmothionTextf
+    }
+    
+    
 }//class
 
 enum StutteringTypes: String , Codable{
